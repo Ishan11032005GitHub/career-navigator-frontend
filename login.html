@@ -46,28 +46,31 @@
 async function login(){
   const email = document.getElementById("email").value.trim();
   const pass  = document.getElementById("pass").value.trim();
-  if(!email || !pass){ document.getElementById("msg").innerText = "Please fill in both fields."; return; }
+  console.log("Login attempt:", email, pass); // DEBUG LINE
+  
+  const msgBox = document.getElementById("msg");
+  if(!email || !pass){ msgBox.innerText = "Please fill in both fields."; return; }
 
   try {
-<<<<<<< HEAD
-    const r = await fetch("http://54.234.102.196/api/login", {
-=======
     const r = await fetch("https://career-navigator-ai-1.onrender.com/api/login", {
->>>>>>> 94bf755 (Restore runtime.txt inside backend for Render)
       method: "POST", headers: {"Content-Type": "application/json"},
       body: JSON.stringify({ email, password: pass })
     });
+    console.log("Response:", r.status);
     const d = await r.json();
+    console.log("Response JSON:", d);
 
     if (r.ok && d.token) {
       localStorage.setItem("token", d.token);
       localStorage.setItem("username", d.username);
-      window.location.href = "dashboard.html";
+      msgBox.style.color = "green";
+      msgBox.innerText = "✅ Login successful!";
+      setTimeout(() => window.location.href = "dashboard.html", 800);
     } else {
-      document.getElementById("msg").innerText = d.detail || "Login failed.";
+      msgBox.innerText = d.detail || "Login failed.";
     }
   } catch (err) {
-    document.getElementById("msg").innerText = "⚠️ Server error: " + err.message;
+    msgBox.innerText = "⚠️ Server error: " + err.message;
   }
 }
 </script>
