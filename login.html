@@ -52,7 +52,7 @@ async function login(){
   if(!email || !pass){ msgBox.innerText = "Please fill in both fields."; return; }
 
   try {
-    const r = await fetch("https://career-navigator-ai-1.onrender.com/api/login", {
+    const r = await fetch("https://career-navigator-backend-production.up.railway.app/api/login", {
       method: "POST", headers: {"Content-Type": "application/json"},
       body: JSON.stringify({ email, password: pass })
     });

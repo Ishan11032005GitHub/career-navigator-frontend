@@ -30,7 +30,7 @@ if (!localStorage.getItem("token")) {
   window.location.href = "login.html";
 }
 
-const API = "https://career-navigator-ai-1.onrender.com/api";
+const API = "https://career-navigator-backend-production.up.railway.app/api";
 const token = localStorage.getItem("token");
 const threadId = localStorage.getItem("learning_thread") || crypto.randomUUID();
 localStorage.setItem("learning_thread", threadId);
