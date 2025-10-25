@@ -86,21 +86,30 @@ async function chat(message) {
       },
       body: JSON.stringify({ message, thread_id: threadId })
     });
+    
+    if (!r.ok) {
+      throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+    }
+    
     const data = await r.json();
     thinkingEl.remove();
     appendMessage(message, "user");
     appendMessage(data.reply || "(no reply)", "bot");
 
-    await fetch(`${API}/learning/chat/save`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({ message, reply: data.reply })
-    });
+    // Only save if we got a valid reply
+    if (data.reply && data.reply !== "(no reply)") {
+      await fetch(`${API}/learning/chat/save`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ message, reply: data.reply })
+      });
+    }
   } catch (e) {
-    thinkingEl.textContent = "⚠️ Network error: " + e.message;
+    thinkingEl.textContent = `⚠️ Error: ${e.message}`;
+    thinkingEl.style.color = "red";
   } finally {
     msgBox.disabled = false;
     sendBtn.disabled = false;
